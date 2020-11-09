@@ -34,6 +34,7 @@ const createPost = async (req, res) => {
 const updatePost = async (req, res) => {
   const postId = req.params.id;
   const postData = req.body;
+  postData.tags = postData.tags.split(',').map((item) => item.trim());
 
   if (!mongoose.Types.ObjectId.isValid(postId))
     return res.status(404).json({ message: 'Invalid post id' });
