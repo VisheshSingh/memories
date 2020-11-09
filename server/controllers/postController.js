@@ -37,7 +37,7 @@ const updatePost = async (req, res) => {
   postData.tags = postData.tags.split(',').map((item) => item.trim());
 
   if (!mongoose.Types.ObjectId.isValid(postId))
-    return res.status(404).json({ message: 'Invalid post id' });
+    return res.status(404).json({ message: 'Cannot update: Invalid post id' });
 
   const updatedPost = await Post.findByIdAndUpdate(postId, postData, {
     new: true,
@@ -45,8 +45,19 @@ const updatePost = async (req, res) => {
   res.json(updatedPost);
 };
 
+const deletePost = async (req, res) => {
+  const postId = req.params.id;
+
+  if (!mongoose.Types.ObjectId.isValid(postId))
+    return res.status(404).json({ message: 'Cannot delete: Invalid post id' });
+
+  await Post.findByIdAndDelete(postId);
+  res.json({ message: 'Deleted!' });
+};
+
 module.exports = {
   getPosts,
   createPost,
   updatePost,
+  deletePost,
 };
